@@ -14,13 +14,13 @@ app.get("/users", (req, res, next) => {
       });
     });
   });
- one();
-  function one(){
-    User.find().then(documents => {
+//  one();
+//   function one(){
+//     User.find().then(documents => {
         
-        console.log(documents);
-      });
-  }
+//         console.log(documents);
+//       });
+//   }
 
 app.listen(port, () => {
     console.log('Server is up on port ' + port)
