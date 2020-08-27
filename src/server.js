@@ -11,7 +11,7 @@ app.get("/users", (req, res, next) => {
     User.find().then(documents => {
       console.log(documents);
       res.status(200).json({
-        lastIdUsed: documents
+        message: "Posts fetched successfully!",
       });
     });
   });
