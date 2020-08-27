@@ -8,9 +8,16 @@ const port = process.env.PORT
 app.use(express.json())
 
 app.get("/users", (req, res, next) => {
+    User.find().then(documents => {
+      res.status(200).json({
+        message: documents,
+      });
+    });
+  });
+  app.get("/k", (req, res, next) => {
       res.status(200).json({
         message: "Posts fetched successfully!",
-      });
+    });
   });
 
 //  one();
