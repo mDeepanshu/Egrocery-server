@@ -5,7 +5,7 @@ const app = express()
 const port = process.env.PORT || 3000
 
 app.use(express.json())
-app.get("/api/lastIdUsed", (req, res, next) => {
+app.get("/users", (req, res, next) => {
     users.find().then(documents => {
       res.status(200).json({
         message: "Posts fetched successfully!",
