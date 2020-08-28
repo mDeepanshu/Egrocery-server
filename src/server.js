@@ -10,12 +10,14 @@ app.use(express.json())
 app.get("/l", async (req, res, next) => {
   try {
   const data = await User.findById(1);
+  console.log(data);
   if (!data) {
     return res.status(404).send()
   }
   res.json({
     message: "Posts fetched successfully!",
   });
+
   } catch (error) {
     res.status(404).send()
     
@@ -30,15 +32,15 @@ app.get("/l", async (req, res, next) => {
     });
   });
 
-//  one();
-//  async function one(){
-//     const data = await User.find();
-//   if (!data) {
-//     return res.status(404).send()
-// }
-// // res.send(data)
-// console.log("data",data);
-//   }
+ one();
+ async function one(){
+    const data = await User.find();
+  if (!data) {
+    return res.status(404).send()
+}
+// res.send(data)
+console.log("data",data);
+  }
 
 app.listen(port, () => {
     console.log('Server is up on port ' + port)
