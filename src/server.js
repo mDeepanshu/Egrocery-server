@@ -8,13 +8,13 @@ const port = process.env.PORT
 app.use(express.json())
 
 app.get("/users", async (req, res, next) => {
-  const data = await User.find();
+  const data = await User.findById(1);
   if (!data) {
     return res.status(404).send()
-}
-res.status(200).json({
-  message: "Posts fetched successfully!",
-});// console.log(data);
+  }
+  res.json({
+    message: "Posts fetched successfully!",
+  });
 
   });
   app.get("/k", (req, res, next) => {
