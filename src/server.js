@@ -7,12 +7,14 @@ const port = process.env.PORT
 
 app.use(express.json())
 
-app.get("/users", (req, res, next) => {
-    User.find().then(documents => {
-      res.status(200).json({
-        message: documents,
-      });
-    });
+app.get("/users", async (req, res, next) => {
+  const data = await User.find();
+  if (!data) {
+    return res.status(404).send()
+}
+res.send(data)
+// console.log(data);
+
   });
   app.get("/k", (req, res, next) => {
       res.status(200).json({
@@ -21,10 +23,13 @@ app.get("/users", (req, res, next) => {
   });
 
 //  one();
-//   function one(){
-//       User.find().then(documents => {
-//         console.log(documents);
-//       });
+//  async function one(){
+//     const data = await User.find();
+//   if (!data) {
+//     return res.status(404).send()
+// }
+// // res.send(data)
+// console.log("data",data);
 //   }
 
 app.listen(port, () => {
