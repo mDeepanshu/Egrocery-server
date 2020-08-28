@@ -7,7 +7,7 @@ const port = process.env.PORT
 
 app.use(express.json())
 
-app.get("/users", async (req, res, next) => {
+app.get("/l", async (req, res, next) => {
   try {
   const data = await User.findById(1);
   if (!data) {
