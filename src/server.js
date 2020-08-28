@@ -8,6 +8,7 @@ const port = process.env.PORT
 app.use(express.json())
 
 app.get("/users", async (req, res, next) => {
+  try {
   const data = await User.findById(1);
   if (!data) {
     return res.status(404).send()
@@ -15,6 +16,12 @@ app.get("/users", async (req, res, next) => {
   res.json({
     message: "Posts fetched successfully!",
   });
+  } catch (error) {
+    res.status(404).send()
+    
+  }
+  
+ 
 
   });
   app.get("/k", (req, res, next) => {
