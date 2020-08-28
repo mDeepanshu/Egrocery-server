@@ -12,8 +12,9 @@ app.get("/users", async (req, res, next) => {
   if (!data) {
     return res.status(404).send()
 }
-res.send(data)
-// console.log(data);
+res.status(200).json({
+  message: "Posts fetched successfully!",
+});// console.log(data);
 
   });
   app.get("/k", (req, res, next) => {
