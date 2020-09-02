@@ -74,6 +74,7 @@ app.get('/banner', async (req, res) => {
 
       // res.set('Content-Type', 'image/png')
       res.status(201).json({
+        _id:banners[0]._id,
         img: banners[0].Img,
         barcode:banners[0].barcode
       });  
