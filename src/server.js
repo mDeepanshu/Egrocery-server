@@ -67,7 +67,7 @@ res.send({message:"good"})
 app.get('/banner', async (req, res) => {
   try {
       const banners = await Banner.find();
-      console.log({a:banners[0].Img});
+      console.log(typeof banners[0].img.buffer.data);
       if (!banners) {
           throw new Error()
       }
@@ -75,7 +75,7 @@ app.get('/banner', async (req, res) => {
       // res.set('Content-Type', 'image/png')
       res.status(201).json({
         _id:banners[0]._id,
-        img: banners[0].Img,
+        img: banners[0].img,
         barcode:banners[0].barcode
       });  
     } catch (e) {
