@@ -41,7 +41,9 @@ app.get('/getBanner', async (req, res) => {
 
 })
 app.get('/', async (req, res) => {
+   await onStart();
     res.send('banners')
+
 
 })
 app.listen(port, () => {
