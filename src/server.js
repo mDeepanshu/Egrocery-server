@@ -1,9 +1,9 @@
 const express = require('express')
-const multer = require('multer')
-const fileUpload = require('express-fileupload')
-const mongodb = require('mongodb')
-const fs = require('fs')
-const binary = mongodb.Binary
+// const multer = require('multer')
+// const fileUpload = require('express-fileupload')
+// const mongodb = require('mongodb')
+// const fs = require('fs')
+// const binary = mongodb.Binary
 
 const User = require('./models/users');
 const Banner = require('./models/banners');
@@ -15,7 +15,7 @@ const app = express()
 const port = process.env.PORT
 
 app.use(express.json())
-app.use(fileUpload())
+// app.use(fileUpload())
 
 
 // app.get("/banners", async (req, res, next) => {
