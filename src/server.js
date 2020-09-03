@@ -67,6 +67,10 @@ app.get('/getBanner', async (req, res) => {
     res.send(banners)
 
 })
+app.get('/', async (req, res) => {
+    res.send('banners')
+
+})
 app.listen(port, () => {
     console.log('Server is up on port ' + port)
 })
