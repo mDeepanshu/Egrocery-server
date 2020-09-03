@@ -8,6 +8,8 @@ const express = require('express')
 const User = require('./models/users');
 const Banner = require('./models/banners');
 const homeItems = require('./models/homeItems');
+ 
+let allBanners;
 
 require('./db/mongoose')
 
@@ -16,39 +18,10 @@ const port = process.env.PORT
 
 app.use(express.json())
 // app.use(fileUpload())
-
-
-// app.get("/banners", async (req, res, next) => {
-//   try {
-//   const data = await User.findById(1);
-//   console.log(data);
-//   if (!data) {
-//     return res.status(404).send()
-//   }
-//   res.json({
-//     message: data,
-//   });
-
-//   } catch (error) {
-//     res.status(404).send()
-    
-//   }
-  
-//   });
-
-//   const upload = multer({
-//   // limits:{
-//   //   fileSize:2000000
-//   // },
-//   fileFilter(req, file, cb) {
-//     if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
-//         return cb(new Error('Please upload an image'))
-//     }
-
-//     cb(undefined, true)
-// }
-
-//   })
+async function onStart(){
+  const banners = await Banner.find();
+  this.allBanners = banners
+}
 
 app.post("/addBanner", async(req, res) => {
   let b64 = new Buffer(req.files.uploadedFile.data).toString("base64");
@@ -63,8 +36,8 @@ app.post("/addBanner", async(req, res) => {
 })
 
 app.get('/getBanner', async (req, res) => {
-  const banners = await Banner.find();
-    res.send(banners)
+  // const banners = await Banner.find();
+    res.send(this.allBanners)
 
 })
 app.get('/', async (req, res) => {
