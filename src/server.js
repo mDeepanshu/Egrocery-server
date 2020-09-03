@@ -1,5 +1,9 @@
 const express = require('express')
 const multer = require('multer')
+const fileUpload = require('express-fileupload')
+const mongodb = require('mongodb')
+const fs = require('fs')
+const binary = mongodb.Binary
 
 const User = require('./models/users');
 const Banner = require('./models/banners');
@@ -11,78 +15,58 @@ const app = express()
 const port = process.env.PORT
 
 app.use(express.json())
+app.use(fileUpload())
 
 
+// app.get("/banners", async (req, res, next) => {
+//   try {
+//   const data = await User.findById(1);
+//   console.log(data);
+//   if (!data) {
+//     return res.status(404).send()
+//   }
+//   res.json({
+//     message: data,
+//   });
 
-app.get("/banners", async (req, res, next) => {
-  try {
-  const data = await User.findById(1);
-  console.log(data);
-  if (!data) {
-    return res.status(404).send()
-  }
-  res.json({
-    message: data,
-  });
-
-  } catch (error) {
-    res.status(404).send()
+//   } catch (error) {
+//     res.status(404).send()
     
-  }
+//   }
   
-  });
+//   });
 
-  const upload = multer({
-  // limits:{
-  //   fileSize:2000000
-  // },
-  fileFilter(req, file, cb) {
-    if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
-        return cb(new Error('Please upload an image'))
-    }
+//   const upload = multer({
+//   // limits:{
+//   //   fileSize:2000000
+//   // },
+//   fileFilter(req, file, cb) {
+//     if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
+//         return cb(new Error('Please upload an image'))
+//     }
 
-    cb(undefined, true)
-}
+//     cb(undefined, true)
+// }
 
+//   })
+
+app.post("/addBanner", async(req, res) => {
+  let b64 = new Buffer(req.files.uploadedFile.data).toString("base64");
+  const banner = new Banner({
+    _id:1,
+    img:b64,
+    barcode:""
   })
+  await banner.save()
+  res.send("good")
 
-app.post('/addBanner', upload.single('upload'), async (req, res) => {
-    // const buffer = await sharp(req.file.buffer).resize({ width: 250, height: 250 }).png().toBuffer()
-    console.log(req.file);
-    buffer= req.file.buffer
-    // req.user.avatar = buffer
-    const banner = new Banner({
-      _id:3,
-      Img:buffer,
-      barcode:""
-    })
-    console.log(banner);
-    // await banner.save()
-    res.send()
-}, (error, req, res, next) => {
-    res.status(400).send({ error: error.message })
-res.send({message:"good"})
 })
 
-app.get('/banner', async (req, res) => {
-  try {
-      const banners = await Banner.find();
-      console.log(typeof banners[0].img.buffer.data);
-      if (!banners) {
-          throw new Error()
-      }
+app.get('/getBanner', async (req, res) => {
+  const banners = await Banner.find();
+    res.send(banners)
 
-      // res.set('Content-Type', 'image/png')
-      res.status(201).json({
-        _id:banners[0]._id,
-        img: banners[0].img,
-        barcode:banners[0].barcode
-      });  
-    } catch (e) {
-      res.status(404).send()
-  }
 })
-
 app.listen(port, () => {
     console.log('Server is up on port ' + port)
 })

@@ -1,9 +1,8 @@
 const mongoose = require('mongoose');
-const { Binary } = require('mongodb');
 
 const bannerSchema = mongoose.Schema({
   _id:{type:Number, required:true},
-  img: { type: Buffer},
+  img: { type: String },
   barcode: { type: String },
 
 
