@@ -9,7 +9,8 @@ const User = require('./models/users');
 const Banner = require('./models/banners');
 const homeItems = require('./models/homeItems');
  
-let allBanners;
+// var allBanners;
+const allBanners =  Banner.find();
 
 require('./db/mongoose')
 
@@ -18,10 +19,11 @@ const port = process.env.PORT
 
 app.use(express.json())
 // app.use(fileUpload())
-async function onStart(){
-  const banners = await Banner.find();
-  this.allBanners = banners
-}
+// async function onStart(){
+//   // this.allBanners = banners
+//   this.allBanners = 1;
+//   console.log(this.allBanners);
+// }
 
 app.post("/addBanner", async(req, res) => {
   let b64 = new Buffer(req.files.uploadedFile.data).toString("base64");
@@ -36,13 +38,13 @@ app.post("/addBanner", async(req, res) => {
 })
 
 app.get('/getBanner', async (req, res) => {
-  // const banners = await Banner.find();
-    res.send(this.allBanners)
+  const banners = await Banner.find();
+    res.send(banners)
 
 })
 app.get('/', async (req, res) => {
-   await onStart();
-    res.send('banners')
+  //  await onStart();
+    res.send('start Page')
 
 
 })
