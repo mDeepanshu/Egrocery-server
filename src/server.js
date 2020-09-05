@@ -7,7 +7,7 @@ const express = require('express')
 
 const User = require('./models/users');
 const Banner = require('./models/banners');
-const homeItems = require('./models/homeItems');
+const HomeItems = require('./models/homeItems');
  
 // var allBanners;
 const allBanners =  Banner.find();
@@ -50,11 +50,17 @@ app.get('/', async (req, res) => {
     res.send('Lets Go...!')
 })
 
-app.get('/variable', async (req, res) => {
+app.get('/variable', (req, res) => {
   res.send(arr)
   arr.a=arr.a+1
   arr.b=arr.b+1
   arr.c=arr.c+1
+})
+
+app.get('/homeItems', async (req, res) => {
+  const homeItems = await HomeItems.find() 
+  res.send(homeItems);
+ 
 })
 
 app.listen(port, () => {
