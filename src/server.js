@@ -17,6 +17,9 @@ require('./db/mongoose')
 const app = express()
 const port = process.env.PORT
 
+var lumos = 5;
+var arr = {a:0,b:1,c:2}
+
 app.use(express.json())
 // app.use(fileUpload())
 // async function onStart(){
@@ -44,10 +47,16 @@ app.get('/getBanner', async (req, res) => {
 })
 app.get('/', async (req, res) => {
   //  await onStart();
-    res.send('start Page')
-
-
+    res.send('Lets Go...!')
 })
+
+app.get('/variable', async (req, res) => {
+  res.send(arr)
+  arr.a=arr.a+1
+  arr.b=arr.b+1
+  arr.c=arr.c+1
+})
+
 app.listen(port, () => {
     console.log('Server is up on port ' + port)
 })
