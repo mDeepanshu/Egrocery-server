@@ -57,8 +57,14 @@ app.get('/variable', (req, res) => {
   arr.c=arr.c+1
 })
 
-app.get('/homeItems', async (req, res) => {
+app.get('/items', async (req, res) => {
   const homeItems = await HomeItems.find() 
+  res.send(homeItems);
+ 
+})
+
+app.get('/homeItems', async (req, res) => {
+  const homeItems = await HomeItems.find({},{img:1,name:1}) 
   res.send(homeItems);
  
 })
