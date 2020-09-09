@@ -8,8 +8,7 @@ const multer = require('multer')
 const User = require('./models/users');
 const Banner = require('./models/banners');
 const HomeItems = require('./models/homeItems');
-const Items = require('./models/Items');
-
+const Items = require('./models/items')
  
 // var allBanners;
 const allBanners =  Banner.find();
