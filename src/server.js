@@ -1,5 +1,5 @@
 const express = require('express')
-// const multer = require('multer')
+const multer = require('multer')
 // const fileUpload = require('express-fileupload')
 // const mongodb = require('mongodb')
 // const fs = require('fs')
@@ -8,6 +8,8 @@ const express = require('express')
 const User = require('./models/users');
 const Banner = require('./models/banners');
 const HomeItems = require('./models/homeItems');
+const Items = require('./models/Items');
+
  
 // var allBanners;
 const allBanners =  Banner.find();
@@ -27,16 +29,29 @@ app.use(express.json())
 //   this.allBanners = 1;
 //   console.log(this.allBanners);
 // }
+const upload = multer({
+  
+  fileFilter(req, file, cb) {
+      if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
+          return cb(new Error('Please upload an image'))
+      }
 
-app.post("/addBanner", async(req, res) => {
-  let b64 = new Buffer(req.files.uploadedFile.data).toString("base64");
+      cb(undefined, true)
+  }
+})
+app.post("/addBanner",upload.single('avatar'),  async(req, res) => {
+  
+  // console.log(req.file.buffer.toString("base64"));
+  // console.log(req);
+
+  let b64 = new Buffer(req.file.buffer).toString("base64");
   const banner = new Banner({
-    _id:1,
+    _id:10,
     img:b64,
     barcode:""
   })
   await banner.save()
-  res.send("good")
+  res.send(banner)
 
 })
 
@@ -60,6 +75,19 @@ app.get('/variable', (req, res) => {
 app.get('/items', async (req, res) => {
   const homeItems = await HomeItems.find() 
   res.send(homeItems);
+ 
+})
+
+app.post('/addHomeItems',upload.single('avatar'), async (req, res) => {
+  console.log(req.files);
+  // let b64 = new Buffer(req.files.uploadedFile.data).toString("base64");
+  const homeItem = new HomeItems({
+    _id:1,
+    img:'b64',
+    barcode:""
+  })
+  // await homeItem.save()
+  res.send(homeItem);
  
 })
 
