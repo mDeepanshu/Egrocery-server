@@ -19,6 +19,8 @@ const app = express()
 const port = process.env.PORT
 
 var lumos = 5;
+var bannerId = {id:4} ;
+var itemId   = {id:7};
 var arr = {a:0,b:1,c:2}
 
 app.use(express.json())
@@ -45,11 +47,12 @@ app.post("/addBanner",upload.single('avatar'),  async(req, res) => {
 
   let b64 = new Buffer(req.file.buffer).toString("base64");
   const banner = new Banner({
-    _id:10,
+    _id:bannerId.id,
     img:b64,
     barcode:""
   })
   await banner.save()
+  bannerId = bannerId+1
   res.send(banner)
 
 })
@@ -78,15 +81,17 @@ app.get('/items', async (req, res) => {
 })
 
 app.post('/addHomeItems',upload.single('avatar'), async (req, res) => {
-  console.log(req.files);
-  // let b64 = new Buffer(req.files.uploadedFile.data).toString("base64");
+  console.log(req.body.name);
+  let b64 = new Buffer(req.file.buffer).toString("base64");
   const homeItem = new HomeItems({
-    _id:1,
-    img:'b64',
-    barcode:""
+    _id:itemId.id,
+    img:b64,
+    barcode:"",
+    name:req.body.name
   })
-  // await homeItem.save()
-  res.send(homeItem);
+  await homeItem.save()
+  res.send(req.body.name);
+  itemId.id=itemId.id+1
  
 })
 
@@ -96,6 +101,28 @@ app.get('/homeItems', async (req, res) => {
  
 })
 
+app.post('/addCartItem', async (req, res) => {
+  console.log(req.body.itemId,req.body.amount,req.body.userId);
+  let cartItem = {
+    _id:req.body.itemId,
+    amount:req.body.amount
+  }
+  User.findByIdAndUpdate({ _id: req.body.userId},{ $push: { cartItems: cartItem } }).then(user => {
+    // user.cartItems.push( cartItem )
+    // user.save()
+    console.log(user);
+  });
+  res.status(201).json({
+    message: 'cart item added'
+  });  
+ 
+})
+app.get('/getCartItems', async (req, res) => {
+  let id = 1
+  const CartItems = await User.find({_id:id},{_id:-1,cartItems:1}) 
+  res.send(CartItems);
+ 
+})
 app.listen(port, () => {
     console.log('Server is up on port ' + port)
 })
