@@ -119,8 +119,22 @@ app.post('/addCartItem', async (req, res) => {
 })
 app.get('/getCartItems', async (req, res) => {
   let id = 1
-  const CartItems = await User.find({_id:id},{_id:-1,cartItems:1}) 
-  res.send(CartItems);
+  console.log(req.body);
+  let itemIds=[]
+  const CartItems = await User.find({_id:id},{_id:-1,cartItems:1}).then((user)=>{
+    // console.log(user[0].cartItems.length);
+    for (let i = 0; i < user[0].cartItems.length; i++) {
+      user[0].cartItems[i]._id      
+      itemIds.push(user[0].cartItems[i]._id)
+    }
+    HomeItems.find({_id:itemIds}).then((items)=>{
+      console.log(items);
+      res.send(items);
+
+    })
+
+  }) 
+  
  
 })
 app.listen(port, () => {
