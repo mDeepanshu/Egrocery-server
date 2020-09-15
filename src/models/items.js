@@ -2,9 +2,9 @@ const mongoose = require('mongoose');
 
 const itemSchema = mongoose.Schema({
   _id:{type:Number, required:true}, // barcode
-  img: { type: String}, 
-  name: {type:String},
-
+  img:  {type:String}, 
+  mrp: {type:String},
+  rate: {type:String},
 
 });
 

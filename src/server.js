@@ -40,6 +40,7 @@ const upload = multer({
       cb(undefined, true)
   }
 })
+
 app.post("/addBanner",upload.single('avatar'),  async(req, res) => {
   
   // console.log(req.file.buffer.toString("base64"));
@@ -62,9 +63,10 @@ app.get('/getBanner', async (req, res) => {
     res.send(banners)
 
 })
+
 app.get('/', async (req, res) => {
   //  await onStart();
-    res.send('Lets Go...!')
+    res.send("Lets..GOOO.!!!")
 })
 
 app.get('/variable', (req, res) => {
@@ -74,42 +76,38 @@ app.get('/variable', (req, res) => {
   arr.c=arr.c+1
 })
 
-app.get('/items', async (req, res) => {
-  const homeItems = await HomeItems.find() 
-  res.send(homeItems);
- 
-})
-
-app.post('/addHomeItems',upload.single('avatar'), async (req, res) => {
+app.post('/addItems',upload.single('avatar'), async (req, res) => {
   console.log(req.body.name);
   let b64 = new Buffer(req.file.buffer).toString("base64");
-  const homeItem = new HomeItems({
+  const item = new Items({
     _id:itemId.id,
     img:b64,
-    barcode:"",
-    name:req.body.name
+    name:req.body.name,
+    mrp:req.body.mrp,
+    rate:req.body.rate
+
   })
-  await homeItem.save()
+  await item.save()
   res.send(req.body.name);
   itemId.id=itemId.id+1
  
 })
 
-app.get('/homeItems', async (req, res) => {
-  const homeItems = await HomeItems.find({},{img:1,name:1}) 
+app.get('/HomeItems', async (req, res) => {
+  const homeItems = await Items.find({},{img:1,name:1}).limit(9) 
   res.send(homeItems);
  
 })
 
 app.post('/addCartItem', async (req, res) => {
+
   console.log(req.body.itemId,req.body.amount,req.body.userId);
   let cartItem = {
     _id:req.body.itemId,
     amount:req.body.amount
   }
   User.findByIdAndUpdate({ _id: req.body.userId},{ $push: { cartItems: cartItem } }).then(user => {
-    // user.cartItems.push( cartItem )
-    // user.save()
+    user.cartItems.push( cartItem )
     console.log(user);
   });
   res.status(201).json({
@@ -117,9 +115,10 @@ app.post('/addCartItem', async (req, res) => {
   });  
  
 })
+
 app.get('/getCartItems', async (req, res) => {
   let id = 1
-  console.log(req.body);
+  // console.log(req.body);
   let itemIds=[]
   const CartItems = await User.find({_id:id},{_id:-1,cartItems:1}).then((user)=>{
     // console.log(user[0].cartItems.length);
@@ -127,9 +126,22 @@ app.get('/getCartItems', async (req, res) => {
       user[0].cartItems[i]._id      
       itemIds.push(user[0].cartItems[i]._id)
     }
-    HomeItems.find({_id:itemIds}).then((items)=>{
-      console.log(items);
-      res.send(items);
+    Items.find({_id:itemIds}).then((items)=>{
+      toSend=[];
+      for (let i = 0; i < items.length; i++) {
+        let obj={
+          _id:items[i]._id,
+          name:items[i].name,
+          img :items[i].img,
+          mrp :items[i].mrp,
+          rate :items[i].rate,
+          amount :user[0].cartItems[i].amount,
+
+        }
+        toSend.push(obj)
+      }
+      // console.log(toSend);
+      res.send(toSend);
 
     })
 
@@ -137,6 +149,7 @@ app.get('/getCartItems', async (req, res) => {
   
  
 })
+
 app.listen(port, () => {
     console.log('Server is up on port ' + port)
 })
