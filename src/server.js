@@ -129,6 +129,7 @@ app.get('/getCartItems', async (req, res) => {
     }
     Items.find({_id:itemIds}).then((items)=>{
       toSend=[];
+      console.log(items[0].name);
       for (let i = 0; i < items.length; i++) {
         let obj={
           _id:items[i]._id,

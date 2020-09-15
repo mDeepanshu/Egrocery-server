@@ -5,6 +5,8 @@ const itemSchema = mongoose.Schema({
   img:  {type:String}, 
   mrp: {type:String},
   rate: {type:String},
+  name: {type:String},
+
 
 });
 
