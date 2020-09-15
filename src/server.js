@@ -117,8 +117,9 @@ app.post('/addCartItem', async (req, res) => {
 })
 
 app.get('/getCartItems', async (req, res) => {
-  let id = req.headers.userID
-  // console.log(req.body);
+  let id = req.headers.userid
+  console.log(req.headers.userid);
+  // console.log(req.header);
   let itemIds=[]
   const CartItems = await User.find({_id:id},{_id:-1,cartItems:1}).then((user)=>{
     // console.log(user[0].cartItems.length);
