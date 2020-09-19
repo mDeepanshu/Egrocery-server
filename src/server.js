@@ -98,7 +98,11 @@ app.get('/HomeItems', async (req, res) => {
   res.send(homeItems);
  
 })
-
+app.get('/getItems', async (req, res) => {
+  const items = await Items.find()
+  res.send(items);
+ 
+})
 app.post('/addCartItem', async (req, res) => {
 
   console.log(req.body.itemId,req.body.amount,req.body.userId);
@@ -121,10 +125,10 @@ app.get('/getCartItems', async (req, res) => {
   console.log(req.headers.userid);
   // console.log(req.header);
   let itemIds=[]
-  const CartItems = await User.find({_id:id},{_id:-1,cartItems:1}).then((user)=>{
+  const CartItems = await User.find({_id:id},{_id:0,cartItems:1}).then((user)=>{
     // console.log(user[0].cartItems.length);
     for (let i = 0; i < user[0].cartItems.length; i++) {
-      user[0].cartItems[i]._id      
+      // user[0].cartItems[i]._id      
       itemIds.push(user[0].cartItems[i]._id)
     }
     Items.find({_id:itemIds}).then((items)=>{
