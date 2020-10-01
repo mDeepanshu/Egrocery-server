@@ -102,7 +102,7 @@ app.get('/getItems', async (req, res) => {
 })
 
 app.post('/addCartItem',  (req, res) => {
-  console.log("req.header.d",req.header.d);
+  console.log("req.header.d",req.headers.d);
   console.log("req.body",req.body);
   let itemsArr = req.body.items;
   User.findByIdAndUpdate({ _id: req.body.userId},{ $set: { cartItems: itemsArr } }).then(user => {
