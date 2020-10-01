@@ -25,11 +25,7 @@ var arr = {a:0,b:1,c:2}
 
 app.use(express.json())
 // app.use(fileUpload())
-// async function onStart(){
-//   // this.allBanners = banners
-//   this.allBanners = 1;
-//   console.log(this.allBanners);
-// }
+
 const upload = multer({
   
   fileFilter(req, file, cb) {
@@ -107,15 +103,9 @@ app.get('/getItems', async (req, res) => {
 
 app.post('/addCartItem', async (req, res) => {
 
-  // console.log(req.body.itemId,req.body.amount,req.body.userId);
-  // let cartItem = {
-  //   _id:req.body.itemId,
-  //   amount:req.body.amount
-  // }
-  let userId = req.body.userId;
   let itemsArr = req.body.items;
-  User.findByIdAndUpdate({ _id: req.body.userId},{ $push: { cartItems: itemsArr } }).then(user => {
-    user.cartItems.push( cartItem )
+  User.findByIdAndUpdate({ _id: req.body.userId},{ $set: { cartItems: itemsArr } }).then(user => {
+    // user.cartItems.push( cartItem )
     console.log(user);
   });
   res.status(201).json({
