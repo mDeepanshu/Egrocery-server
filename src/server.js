@@ -98,19 +98,23 @@ app.get('/HomeItems', async (req, res) => {
   res.send(homeItems);
  
 })
+
 app.get('/getItems', async (req, res) => {
   const items = await Items.find()
   res.send(items);
  
 })
+
 app.post('/addCartItem', async (req, res) => {
 
-  console.log(req.body.itemId,req.body.amount,req.body.userId);
-  let cartItem = {
-    _id:req.body.itemId,
-    amount:req.body.amount
-  }
-  User.findByIdAndUpdate({ _id: req.body.userId},{ $push: { cartItems: cartItem } }).then(user => {
+  // console.log(req.body.itemId,req.body.amount,req.body.userId);
+  // let cartItem = {
+  //   _id:req.body.itemId,
+  //   amount:req.body.amount
+  // }
+  let userId = req.body.userId;
+  let itemsArr = req.body.items;
+  User.findByIdAndUpdate({ _id: req.body.userId},{ $push: { cartItems: itemsArr } }).then(user => {
     user.cartItems.push( cartItem )
     console.log(user);
   });
@@ -122,7 +126,7 @@ app.post('/addCartItem', async (req, res) => {
 
 app.get('/getCartItems', async (req, res) => {
   let id = req.headers.userid
-  console.log(req.headers.userid);
+  // console.log(req.headers.userid);
   // console.log(req.header);
   let itemIds=[]
   const CartItems = await User.find({_id:id},{_id:0,cartItems:1}).then((user)=>{
