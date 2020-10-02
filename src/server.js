@@ -20,7 +20,6 @@ var bannerId = {id:4} ;
 var itemId   = {id:7};
 var arr = {a:0,b:1,c:2}
 
-app.use(express.json())
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 // app.use(fileUpload())
