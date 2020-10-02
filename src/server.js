@@ -1,9 +1,6 @@
 const express = require('express')
 const multer = require('multer')
-// const fileUpload = require('express-fileupload')
-// const mongodb = require('mongodb')
-// const fs = require('fs')
-// const binary = mongodb.Binary
+const bodyParser = require("body-parser");
 
 const User = require('./models/users');
 const Banner = require('./models/banners');
@@ -24,6 +21,8 @@ var itemId   = {id:7};
 var arr = {a:0,b:1,c:2}
 
 app.use(express.json())
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 // app.use(fileUpload())
 
 const upload = multer({
