@@ -1,6 +1,6 @@
 const express = require('express')
 const multer = require('multer')
-const bodyParser = require("body-parser");
+// const bodyParser = require("body-parser");
 
 const User = require('./models/users');
 const Banner = require('./models/banners');
@@ -20,10 +20,27 @@ var bannerId = {id:4} ;
 var itemId   = {id:7};
 var arr = {a:0,b:1,c:2}
 
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-// app.use(fileUpload())
+// app.use(function(req, res, next) {
+//   res.header("Access-Control-Allow-Origin", "*");
+//   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+//   next();
+// });
 
+app.use(require("body-parser").json())
+// app.use(fileUpload())
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET, POST, PATCH, PUT, DELETE, OPTIONS"
+  );
+  next();
+});
+//
 const upload = multer({
   
   fileFilter(req, file, cb) {
