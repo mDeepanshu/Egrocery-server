@@ -6,6 +6,7 @@ const User = require('./models/users');
 const Banner = require('./models/banners');
 const HomeItems = require('./models/homeItems');
 const Items = require('./models/items')
+const Userslength = require ('./models/userslength')
  
 // var allBanners;
 const allBanners =  Banner.find();
@@ -26,20 +27,20 @@ var arr = {a:0,b:1,c:2}
 //   next();
 // });
 
-app.use(require("body-parser").json())
-// app.use(fileUpload())
-app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
-  res.setHeader(
-    "Access-Control-Allow-Methods",
-    "GET, POST, PATCH, PUT, DELETE, OPTIONS"
-  );
-  next();
-});
+// app.use(require("body-parser").json())
+// // app.use(fileUpload())
+// app.use((req, res, next) => {
+//   res.setHeader("Access-Control-Allow-Origin", "*");
+//   res.setHeader(
+//     "Access-Control-Allow-Headers",
+//     "Origin, X-Requested-With, Content-Type, Accept"
+//   );
+//   res.setHeader(
+//     "Access-Control-Allow-Methods",
+//     "GET, POST, PATCH, PUT, DELETE, OPTIONS"
+//   );
+//   next();
+// });
 //
 const upload = multer({
   
@@ -165,6 +166,49 @@ app.get('/getCartItems', async (req, res) => {
   
  
 })
+
+app.get('/checkUser', async (req, res) => {
+  console.log(req.headers.userid);
+
+ let key ;
+  if (req.headers.email != undefined  ) {
+    console.log("1");
+    key  = "_id";
+  }
+  else if(req.headers.phone != undefined  ){
+    console.log("2");
+    key  = "_id";
+
+  }
+  User.findOne({ [key]: Number(req.headers.userid)}).then(async (user) => {
+    // user.cartItems.push( cartItem )
+    if (user != null) {
+      console.log(user);
+      res.status(201).json({
+        user: user
+      }); 
+    }
+    else{
+      let newid;
+      await Userslength.find().then(document=>{
+        console.log(document);
+        newid= document[0]._id
+        res.status(201).json({
+          newid: newid
+        }); 
+      })
+      const user = new User({
+        _id:newid,
+      })
+      user.save();
+      
+
+    }
+  });
+  //  https://meet.google.com/pgt-hdei-zap
+
+})
+
 
 app.listen(port, () => {
     console.log('Server is up on port ' + port)
