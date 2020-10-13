@@ -204,7 +204,7 @@ app.get('/checkUser', async (req, res) => {
 
 app.post('/addUserData', async (req, res) => {
 console.log(req.body);
-  User.findOneAndUpdate({_id:req.headers.userid},{$set:req.body}).then((user)=>{
+  User.findOneAndUpdate({_id:req.headers.userId},{$set:req.body}).then((user)=>{
     // console.log("user Updated",user);
     res.status(201).json({
       user: user
