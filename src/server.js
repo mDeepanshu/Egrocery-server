@@ -180,7 +180,10 @@ app.get('/checkUser', async (req, res) => {
        await Userslength.findOne({_id:0}).then((document)=>{
         newid= document.toObject().ID
         res.status(201).json({
-          newid: newid
+          user: {
+            _id:newid,
+            firstName:''
+          }
         }); 
       })
       const user = new User({
@@ -188,7 +191,10 @@ app.get('/checkUser', async (req, res) => {
       })
       console.log(user);
       user.save();
-      Userslength.findOneAndUpdate({_id:0},{$inc:{ID:1}}).then(console.log("ID incremented"))
+      Userslength.updateOne( {_id:0} ,{$inc:{ID:1}},{upsert:true}).then((doc)=>{
+        console.log(doc);
+        console.log("inc done")
+      });
       
 
     }
