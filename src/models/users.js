@@ -2,9 +2,11 @@ const mongoose = require('mongoose');
 
 const userSchema = mongoose.Schema({
   _id:{type:Number, required:true},
-  mob_Num:{type:Number },
+  phone:{type:Number },
   email:{type:String },
-  name: { type: String},
+  displayPic:  {type:String}, 
+  firstName: { type: String},
+  lastName: { type: String},
   cartItems:{type:Array},
   addresses:{type:Array}
 });

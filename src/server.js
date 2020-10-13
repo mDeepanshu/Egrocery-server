@@ -1,6 +1,6 @@
 const express = require('express')
 const multer = require('multer')
-// const bodyParser = require("body-parser");
+const bodyParser = require("body-parser");
 
 const User = require('./models/users');
 const Banner = require('./models/banners');
@@ -12,36 +12,19 @@ const Userslength = require ('./models/userslength')
 const allBanners =  Banner.find();
 
 require('./db/mongoose')
-
+// var urlencodedParser = bodyParser.urlencoded({ extended: false })
 const app = express()
 const port = process.env.PORT
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
 var lumos = 5;
 var bannerId = {id:4} ;
 var itemId   = {id:7};
 var arr = {a:0,b:1,c:2}
 
-// app.use(function(req, res, next) {
-//   res.header("Access-Control-Allow-Origin", "*");
-//   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-//   next();
-// });
 
-// app.use(require("body-parser").json())
-// // app.use(fileUpload())
-// app.use((req, res, next) => {
-//   res.setHeader("Access-Control-Allow-Origin", "*");
-//   res.setHeader(
-//     "Access-Control-Allow-Headers",
-//     "Origin, X-Requested-With, Content-Type, Accept"
-//   );
-//   res.setHeader(
-//     "Access-Control-Allow-Methods",
-//     "GET, POST, PATCH, PUT, DELETE, OPTIONS"
-//   );
-//   next();
-// });
-//
 const upload = multer({
   
   fileFilter(req, file, cb) {
@@ -118,12 +101,14 @@ app.get('/getItems', async (req, res) => {
 })
 
 app.post('/addCartItem',  (req, res) => {
-  console.log("req.header.d",req.headers.d);
-  console.log("req.body",req.body);
-  let itemsArr = req.body.items;
-  User.findByIdAndUpdate({ _id: req.body.userId},{ $set: { cartItems: itemsArr } }).then(user => {
-    // user.cartItems.push( cartItem )
-    console.log(user);
+  let type = req.body.type
+  if (type=="u") {
+    type="$push"
+  } else {
+    type="$set"
+  }
+  User.findByIdAndUpdate({ _id: req.body.userId},{ [type]: { cartItems: req.body.items } }).then(user => {
+    console.log("user`s cart items updated",user);
   });
   res.status(201).json({
     message: 'cart item added'
@@ -168,31 +153,32 @@ app.get('/getCartItems', async (req, res) => {
 })
 
 app.get('/checkUser', async (req, res) => {
-  console.log(req.headers.userid);
 
  let key ;
+ let val ;
   if (req.headers.email != undefined  ) {
     console.log("1");
-    key  = "_id";
+    key  = "email";
+    val = req.headers.email;
   }
   else if(req.headers.phone != undefined  ){
     console.log("2");
-    key  = "_id";
+    key  = "phone";
+    val = String(req.headers.phone);
+    console.log(typeof val);
 
   }
-  User.findOne({ [key]: Number(req.headers.userid)}).then(async (user) => {
-    // user.cartItems.push( cartItem )
+  console.log("val", val);
+  User.findOne({ [key]: [val]}).then(async (user) => {
     if (user != null) {
-      console.log(user);
       res.status(201).json({
         user: user
       }); 
     }
     else{
-      let newid;
-      await Userslength.find().then(document=>{
-        console.log(document);
-        newid= document[0]._id
+      let newid=-1;
+       await Userslength.findOne({_id:0}).then((document)=>{
+        newid= document.toObject().ID
         res.status(201).json({
           newid: newid
         }); 
@@ -200,14 +186,27 @@ app.get('/checkUser', async (req, res) => {
       const user = new User({
         _id:newid,
       })
+      console.log(user);
       user.save();
+      Userslength.findOneAndUpdate({_id:0},{$inc:{ID:1}}).then(console.log("ID incremented"))
       
 
     }
   });
-  //  https://meet.google.com/pgt-hdei-zap
 
 })
+
+app.post('/addUserData', async (req, res) => {
+console.log(req.body);
+  User.findOneAndUpdate({_id:req.headers.userid},{$set:req.body}).then((user)=>{
+    // console.log("user Updated",user);
+    res.status(201).json({
+      user: user
+    }); 
+  })
+
+})
+
 
 
 app.listen(port, () => {
