@@ -203,7 +203,7 @@ app.get('/checkUser', async (req, res) => {
 })
 
 app.post('/addUserData', async (req, res) => {
-console.log(req.body);
+console.log("req.body",req.body);
   User.findOneAndUpdate({_id:req.headers.userId},{$set:req.body}).then((user)=>{
     // console.log("user Updated",user);
     res.status(201).json({
