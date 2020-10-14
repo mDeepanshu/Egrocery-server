@@ -17,7 +17,7 @@ const app = express()
 const port = process.env.PORT
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+// app.use(bodyParser.urlencoded({ extended: false }));
 
 var lumos = 5;
 var bannerId = {id:4} ;
@@ -188,6 +188,7 @@ app.get('/checkUser', async (req, res) => {
       })
       const user = new User({
         _id:newid,
+        [key]:req.headers.email
       })
       console.log(user);
       user.save();
@@ -204,11 +205,14 @@ app.get('/checkUser', async (req, res) => {
 
 app.post('/addUserData', async (req, res) => {
 console.log("req.body",req.body);
-  User.findOneAndUpdate({_id:req.headers.userId},{$set:req.body}).then((user)=>{
-    // console.log("user Updated",user);
+// console.log("req.headers.userId",req.headers.userId);
+
+  await User.findByIdAndUpdate({_id:req.headers.userid},{$set:req.body}).then((user)=>{
+    console.log("headers",req.headers);
     res.status(201).json({
       user: user
     }); 
+   
   })
 
 })
