@@ -6,7 +6,10 @@ const itemSchema = mongoose.Schema({
   mrp: {type:String},
   rate: {type:String},
   name: {type:String},
-
+  // description: {type:String},
+  // reviews: {type:String},
+  // rating: {type:String},
+  // headline: {type:String}
 
 });
 

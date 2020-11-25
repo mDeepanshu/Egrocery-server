@@ -7,6 +7,10 @@ const Banner = require('./models/banners');
 const HomeItems = require('./models/homeItems');
 const Items = require('./models/items')
 const Userslength = require ('./models/userslength')
+const Orders = require ('./models/orders')
+const Finders = require ('./models/finders');
+const { find } = require('./models/users');
+
  
 // var allBanners;
 const allBanners =  Banner.find();
@@ -217,7 +221,31 @@ console.log("req.body",req.body);
 
 })
 
+app.get('/finderOrdersList',async(req,res)=>{
+  let resArr=[];
+  let ordersArr=[];
+  await Finders.find({_id:req.headers.finderId}).then((finder)=> {
+    ordersArr= finder.ordersArr;
+  })
+  await Orders.find({_id:ordersArr}).then((orders)=>{
+    for (let i = 0; i < array.length; i++) {
+     resArr.push({"OrderId":ordersArr[i],"Length":orders[i].items.length})
+    }
+    res.status(201).json({
+      "Arr":ordersArr
+    });
+  })
 
+})
+
+app.get('/finderOrdersDetails',async(req,res)=>{
+  let itemsId = await Orders.findOne({_id:res.headers.OrderId},{itemId:1,_id:0}).itemsId;
+  Items.find({_id:itemsId}).then((items)=>{
+    res.status(201).json({
+      "Arr":items
+    });
+  })
+})
 
 app.listen(port, () => {
     console.log('Server is up on port ' + port)
