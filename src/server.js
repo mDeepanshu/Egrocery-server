@@ -222,13 +222,17 @@ console.log("req.body",req.body);
 })
 
 app.get('/finderOrdersList',async(req,res)=>{
+  console.log("req.headers.finderId",req.headers.finderid);
   let resArr=[];
   let ordersArr=[];
-  await Finders.find({_id:req.headers.finderId}).then((finder)=> {
-    ordersArr= finder.ordersArr;
+  await Finders.find({_id:req.headers.finderid}).then((finder)=> {
+    // console.log(finder);
+    ordersArr= finder[0].ordersArr;
   })
+  console.log("ordersArr",ordersArr);
   await Orders.find({_id:ordersArr}).then((orders)=>{
-    for (let i = 0; i < array.length; i++) {
+    console.log(orders);
+    for (let i = 0; i < orders.length; i++) {
      resArr.push({"OrderId":ordersArr[i],"Length":orders[i].items.length})
     }
     res.status(201).json({
