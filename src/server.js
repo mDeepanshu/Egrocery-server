@@ -235,9 +235,9 @@ app.get('/finderOrdersList',async(req,res)=>{
     for (let i = 0; i < orders.length; i++) {
      resArr.push({"OrderId":ordersArr[i],"Length":orders[i].items.length})
     }
-    res.status(201).json({
-      "Arr":ordersArr
-    });
+    res.status(201).json(
+      resArr
+    );
   })
 
 })
