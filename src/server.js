@@ -243,12 +243,16 @@ app.get('/finderOrdersList',async(req,res)=>{
 })
 
 app.get('/finderOrdersDetails',async(req,res)=>{
-  let itemsId = await Orders.findOne({_id:res.headers.OrderId},{itemId:1,_id:0}).itemsId;
-  Items.find({_id:itemsId}).then((items)=>{
-    res.status(201).json({
-      "Arr":items
-    });
-  })
+  let items = await Orders.findOne({_id:req.headers.orderid},{items:1,_id:0});
+  console.log(items.items);
+  // Items.find({_id:items}).then((items)=>{
+  //   res.status(201).json({
+  //     "Arr":items
+  //   });
+  // })
+  res.status(201).json({
+        "Arr":items.items
+      });
 })
 
 app.listen(port, () => {
